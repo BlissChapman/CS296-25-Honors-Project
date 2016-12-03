@@ -6,93 +6,107 @@
 (def engineering-campus {
         :SC-atrium {
                 :desc ""
-                :title "in the atrium"
-                :dir {:northeast :SC-1404}
-                :contents #{}}
+                :title "in the atrium of the Thomas M. Siebel Center for Computer Science"
+                :dir {:north :SC-1404}
+                :courses #{}
+                :items #{}}
         :DCL-1320 {
                 :desc ""
-                :title ""
+                :title "in DCL-1320"
                 :dir {}
-                :contents #{:freshman :CS125, :sophomore :CS233, :senior :CS411}}
+                :courses #{:freshman :CS125, :sophomore :CS233, :senior :CS411}
+                :items #{}}
         :SC-1105 {
                 :desc ""
-                :title ""
+                :title "in SC-1105"
                 :dir {}
-                :contents #{:freshman :CS126}}
+                :courses #{:freshman :CS126}
+                :items #{}}
         :ECEB-1002 {
                 :desc ""
-                :title ""
+                :title "in ECEB-1002"
                 :dir {}
-                :contents #{:freshman :CS173, :sophomore :CS225, :junior :CS374}}
+                :courses #{:freshman :CS173, :sophomore :CS225, :junior :CS374}
+                :items #{}}
         :SC-0218 {
                 :desc ""
-                :title ""
+                :title "in SC-0218"
                 :dir {}
-                :contents #{:sophomore :CS241}}
+                :courses #{:sophomore :CS241}
+                :items #{}}
         :SC-0216 {
                 :desc ""
-                :title ""
+                :title "in SC-0216"
                 :dir {}
-                :contents #{:sophomore :CS296-25, :senior :CS440}}
+                :courses #{:sophomore :CS296-25, :senior :CS440}
+                :items #{}}
         :SC-1404 {
                 :desc ""
-                :title ""
+                :title "in SC-1404"
                 :dir {}
-                :contents #{:junior :CS357, :senior :CS421}}
+                :courses #{:junior :CS357, :senior :CS421}
+                :items #{}}
         :Grainger {
                 :desc ""
-                :title ""
+                :title "in the Grainger Engineering Library"
                 :dir {}
-                :contents #{:junior :CS242}}
+                :courses #{:junior :CS242}
+                :items #{}}
         :SC-1304 {
                 :desc ""
-                :title ""
+                :title "in SC-1304"
                 :dir {}
-                :contents #{:senior :CS210}}
+                :courses #{:senior :CS210}
+                :items #{}}
         :SC-4107 {
-                :desc ""
-                :title ""
+                :desc "the virtual reality lab"
+                :title "in SC-4107"
                 :dir {}
-                :contents #{:senior :CS498}}
+                :courses #{:senior :CS498}
+                :items #{}}
         :SC-1210 {
-                :desc ""
-                :title "in the academic office"
+                :desc "the academic advising office"
+                :title "in SC-1210"
                 :dir {}
-                :contents #{}}
+                :courses #{}
+                :items #{}}
         :SC-1318 {
-                :desc ""
-                :title "in the Women in Computer Science (WCS) office"
+                :desc "the Women in Computer Science (WCS) office"
+                :title "in SC-1318"
                 :dir {}
-                :contents #{}}
+                :courses #{}
+                :items #{:pancakes}}
         :SC-1104 {
-                :desc ""
-                :title "in the Association for Computing Machinery (ACM) office"
+                :desc "the Association for Computing Machinery (ACM) office"
+                :title "in SC-1104"
                 :dir {}
-                :contents #{}}
+                :courses #{}
+                :items #{:pizza}}
         :SC-1320 {
-                :desc ""
-                :title "in the Latinos in Computer Science (LCS) office"
+                :desc "the Latinos in Computer Science (LCS) office"
+                :title "in SC-1320"
                 :dir {}
-                :contents #{}}
+                :courses #{}
+                :items #{}}
         :SC-2124 {
-                :desc ""
-                :title "in the CocoaNuts meeting room"
+                :desc "the CocoaNuts meeting room"
+                :title "in SC-2124"
                 :dir {}
-                :contents #{}}
+                :courses #{}
+                :items #{:friends}}
    })
 
-(def adventurer
-  {:location :SC-atrium
-   :inventory #{}
-   :tick 0
-   :seen #{}})
+(def adventurer {
+          :location :SC-atrium
+          :classrank :freshman
+          :credits #{}
+          :moves-remaining-in-semester 1000
+          :inventory #{}})
 
 (defn status [player]
-  (let [location (player :location)]
-    (print (str "You are " (->  location :title) ". "))
-    (when-not ((player :seen) location)
-      (print (-> engineering-campus location :desc)))
-    (update-in player [:seen] #(conj % location))))
+        (print (str "You are a " (name (player :classrank)) ". "))
+        (let [room (get engineering-campus (player :location))]
+                (print (str "You are " (get room :title) ". "))))
 
 (defn to-keywords [commands]
   (mapv keyword (str/split commands #"[.,?! ]+")))
@@ -103,16 +117,16 @@
     (if (nil? dest)
       (do (println "You can't go that way.")
           player)
-      (assoc-in player [:location] dest))))
-
-(defn tock [player]
-  (update-in player [:tick] inc))
+      (assoc-in player [:location] dest))
+   )
+ )
 
 (defn respond [player command]
   (match command
-         [:look] (update-in player [:seen] #(disj % (-> player :location)))
-         (:or [:n] [:north] ) (go :north player)
-         [:south] (go :south player)
+         (:or [:n] [:north]) (go :north player)
+         (:or [:s] [:south]) (go :south player)
+         (:or [:e] [:east]) (go :east player)
+         (:or [:w] [:west]) (go :west player)
 
          _ (do (println "I don't understand you.")
                player)
@@ -121,7 +135,7 @@
 
 (defn -main [& args]
    (println "\n\n---------- CS @ Illinois: The Text Adventure ----------\n\n")
-   (println "Welcome to the University of Illinois at Urbana-Champaign! You are a freshman in one of the most prestigious CS programs in the world. Over the next four years, you will navigate forests of up-trees, seas of segfaults, and maelstroms of multiplexors. It will take all your wits to survive.\n\nYour goal is to obtain the necessary prerequisites to advance your class rank. To win, you must graduate in 4 years!")
+   (println "Welcome to the University of Illinois at Urbana-Champaign!\nYou are a freshman in one of the most prestigious CS programs in the world.\nOver the next four years, you will navigate forests of up-trees, seas of segfaults, and maelstroms of multiplexors.\nIt will take all your wits to survive.\n\nYour goal is to obtain the necessary prerequisites to advance your class rank. To win, you must graduate in 4 years!")
    (println "\n\n---------- may the finals be ever in your favor ----------\n\n")
 
   (loop [local-map engineering-campus
@@ -129,4 +143,4 @@
     (let [pl (status local-player)
           _  (println "What do you want to do?")
           command (read-line)]
-      (recur local-map (respond pl (to-keywords command))))))
+      (recur local-map (respond local-player (to-keywords command))))))

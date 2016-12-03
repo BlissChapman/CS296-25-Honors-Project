@@ -3,29 +3,95 @@
             [clojure.string :as str])
   (:gen-class))
 
-(def the-map
-  {:foyer {:desc "The walls are freshly painted but do not have any pictures.  You get the feeling it was just created
-for a game or something."
-           :title "in the foyer"
-           :dir {:south :grue-pen}
-           :contents #{:raw-egg}}
-   :grue-pen {:desc "It is very dark.  You are about to be eaten by a grue."
-              :title "in the grue pen"
-              :dir {:north :foyer}
-              :contents #{}}
+(def engineering-campus {
+        :SC-atrium {
+                :desc ""
+                :title "in the atrium"
+                :dir {:northeast :SC-1404}
+                :contents #{}}
+        :DCL-1320 {
+                :desc ""
+                :title ""
+                :dir {}
+                :contents #{:freshman :CS125, :sophomore :CS233, :senior :CS411}}
+        :SC-1105 {
+                :desc ""
+                :title ""
+                :dir {}
+                :contents #{:freshman :CS126}}
+        :ECEB-1002 {
+                :desc ""
+                :title ""
+                :dir {}
+                :contents #{:freshman :CS173, :sophomore :CS225, :junior :CS374}}
+        :SC-0218 {
+                :desc ""
+                :title ""
+                :dir {}
+                :contents #{:sophomore :CS241}}
+        :SC-0216 {
+                :desc ""
+                :title ""
+                :dir {}
+                :contents #{:sophomore :CS296-25, :senior :CS440}}
+        :SC-1404 {
+                :desc ""
+                :title ""
+                :dir {}
+                :contents #{:junior :CS357, :senior :CS421}}
+        :Grainger {
+                :desc ""
+                :title ""
+                :dir {}
+                :contents #{:junior :CS242}}
+        :SC-1304 {
+                :desc ""
+                :title ""
+                :dir {}
+                :contents #{:senior :CS210}}
+        :SC-4107 {
+                :desc ""
+                :title ""
+                :dir {}
+                :contents #{:senior :CS498}}
+        :SC-1210 {
+                :desc ""
+                :title "in the academic office"
+                :dir {}
+                :contents #{}}
+        :SC-1318 {
+                :desc ""
+                :title "in the Women in Computer Science (WCS) office"
+                :dir {}
+                :contents #{}}
+        :SC-1104 {
+                :desc ""
+                :title "in the Association for Computing Machinery (ACM) office"
+                :dir {}
+                :contents #{}}
+        :SC-1320 {
+                :desc ""
+                :title "in the Latinos in Computer Science (LCS) office"
+                :dir {}
+                :contents #{}}
+        :SC-2124 {
+                :desc ""
+                :title "in the CocoaNuts meeting room"
+                :dir {}
+                :contents #{}}
    })
 
 (def adventurer
-  {:location :foyer
+  {:location :SC-atrium
    :inventory #{}
    :tick 0
    :seen #{}})
 
 (defn status [player]
   (let [location (player :location)]
-    (print (str "You are " (-> the-map location :title) ". "))
+    (print (str "You are " (->  location :title) ". "))
     (when-not ((player :seen) location)
-      (print (-> the-map location :desc)))
+      (print (-> engineering-campus location :desc)))
     (update-in player [:seen] #(conj % location))))
 
 (defn to-keywords [commands]
@@ -33,7 +99,7 @@ for a game or something."
 
 (defn go [dir player]
   (let [location (player :location)
-        dest (->> the-map location :dir dir)]
+        dest (->> engineering-campus location :dir dir)]
     (if (nil? dest)
       (do (println "You can't go that way.")
           player)
@@ -51,12 +117,14 @@ for a game or something."
          _ (do (println "I don't understand you.")
                player)
 
-         )) 
+         ))
 
-(defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (loop [local-map the-map
+(defn -main [& args]
+   (println "\n\n---------- CS @ Illinois: The Text Adventure ----------\n\n")
+   (println "Welcome to the University of Illinois at Urbana-Champaign! You are a freshman in one of the most prestigious CS programs in the world. Over the next four years, you will navigate forests of up-trees, seas of segfaults, and maelstroms of multiplexors. It will take all your wits to survive.\n\nYour goal is to obtain the necessary prerequisites to advance your class rank. To win, you must graduate in 4 years!")
+   (println "\n\n---------- may the finals be ever in your favor ----------\n\n")
+
+  (loop [local-map engineering-campus
          local-player adventurer]
     (let [pl (status local-player)
           _  (println "What do you want to do?")

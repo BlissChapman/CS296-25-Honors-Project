@@ -145,8 +145,9 @@
   (let [location (player :location)
         dest (->> engineering-campus location :dir dir)]
     (if (nil? dest)
-      (println "You can't go that way.")
-      (assoc-in player [:location] dest))))
+        (do (println "You can't go that way.")
+              player)
+        (assoc-in player [:location] dest))))
 
  (defn look [player]
    (let [location (player :location)
@@ -172,7 +173,23 @@
      (if (nil? course)
         (println "There are no classes offered for a" (name classrank) "in this room.")
         (do (println "Congratulations, you've earned credit for" (name course) "!")
-            (assoc-in player [:credits] (conj (player :credits) course))))))
+            (def newPlayer (assoc-in player [:credits] (conj (player :credits) course)))
+
+        ;   REQUIREMENTS
+        ;     Freshman: CS125, CS126, CS173
+        ;     Sophomore: CS225, CS233, CS241, and CS296-25
+        ;     Junior: CS242, CS374, CS357
+        ;     Senior: CS210, CS411, CS421, CS440, CS498
+            (println "------------")
+            (println (newPlayer :credits))
+            (println
+                    (clojure.set/subset? (set '(:CS125, :CS126, :CS173)) (set (newPlayer :credits)))
+            )
+
+            (assoc-in newPlayer [:location] location)
+
+
+            ))))
 
 (defn respond [player command]
   (match command

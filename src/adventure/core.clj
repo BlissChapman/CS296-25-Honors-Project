@@ -160,7 +160,19 @@
         player)
 
  (defn DARS [player]
+         (println "")
+         (println "")
+         (println "---------------------------------")
+         (println "REQUIREMENTS")
+         (println "     Freshman: CS125, CS126, CS173")
+         (println "     Sophomore: CS225, CS233, CS241, CS296-25")
+         (println "     Junior: CS242, CS374, CS357")
+         (println "     Senior: CS210, CS411, CS421, CS440, CS498")
+         (println "---------------------------------")
+         (println "")
+         (println "YOUR CREDITS:")
          (println (player :credits))
+         (println "")
          player)
 
  (defn learn [player]

@@ -9,121 +9,121 @@
                 :title "in the atrium of the Thomas M. Siebel Center for Computer Science"
                 :dir {:north :SC-1104, :south :SC-1210, :east :SC-1404, :west :first-floor-elevator}
                 :courses {}
-                :items #{}}
+                :items [:coffee]}
         :basement-elevator {
                 :desc ""
                 :title "by the basement elevator"
                 :dir {:up :first-floor-elevator, :east :SC-0216}
                 :courses {}
-                :items #{}}
+                :items []}
         :first-floor-elevator {
                 :desc ""
                 :title "by the first floor elevator"
                 :dir {:down :basement-elevator, :up :second-floor-elevator, :west :DCL-1320, :east :SC-atrium}
                 :courses {}
-                :items #{}}
+                :items []}
         :second-floor-elevator {
                 :desc ""
                 :title "by the second floor elevator"
                 :dir {:down :first-floor-elevator, :up :third-floor-elevator, :north :SC-2124}
                 :courses {}
-                :items #{}}
+                :items []}
         :third-floor-elevator {
                 :desc ""
                 :title "by the third floor elevator"
                 :dir {:down :second-floor-elevator, :up :fourth-floor-elevator}
                 :courses {}
-                :items #{}}
+                :items []}
         :fourth-floor-elevator {
                 :desc ""
                 :title "by the fourth floor elevator"
                 :dir {:down :third-floor-elevator, :north :SC-4107}
                 :courses {}
-                :items #{}}
+                :items []}
         :DCL-1320 {
                 :desc ""
                 :title "in the Digital Computer Laboratory lecture hall 1320"
                 :dir {:south :Grainger, :east :first-floor-elevator, :west :ECEB-1002}
                 :courses {:freshman :CS125, :sophomore :CS233, :senior :CS411}
-                :items #{}}
+                :items [:troll]}
         :SC-1105 {
                 :desc ""
                 :title "in Siebel Center room 1105"
                 :dir {:south :SC-1104}
                 :courses {:freshman :CS126}
-                :items #{}}
+                :items []}
         :ECEB-1002 {
                 :desc ""
                 :title "in the Electrical and Computer Engineering Building lecture hall 1002"
                 :dir {:east :DCL-1320}
                 :courses {:freshman :CS173, :sophomore :CS225, :junior :CS374}
-                :items #{}}
+                :items [:TI-84]}
         :SC-0218 {
                 :desc ""
                 :title "in the Siebel Center lab 0218"
                 :dir {:west :SC-0216}
                 :courses {:sophomore :CS241}
-                :items #{}}
+                :items []}
         :SC-0216 {
                 :desc ""
                 :title "in the Siebel Center lab 0216"
                 :dir {:east :SC-0218, :west :basement-elevator}
                 :courses {:sophomore :CS296-25, :senior :CS440}
-                :items #{}}
+                :items []}
         :SC-1404 {
                 :desc ""
                 :title "in the Siebel Center lecture hall 1404"
                 :dir {:west :SC-atrium}
                 :courses {:junior :CS357, :senior :CS421}
-                :items #{}}
+                :items [:swag]}
         :Grainger {
                 :desc ""
                 :title "in the Grainger Engineering Library"
                 :dir {:north :DCL-1320}
                 :courses {:junior :CS242}
-                :items #{}}
+                :items [:markers]}
         :SC-1304 {
                 :desc ""
                 :title "in Siebel Center room 1304"
                 :dir {:east :SC-1210}
                 :courses {:senior :CS210}
-                :items #{}}
+                :items []}
         :SC-4107 {
                 :desc "the virtual reality lab"
                 :title "in the Siebel Center lab 4107"
                 :dir {:south :fourth-floor-elevator}
                 :courses {:senior :CS498}
-                :items #{}}
+                :items [:oculus]}
         :SC-1210 {
                 :desc "the academic advising office"
                 :title "in the Siebel Center office 1210"
                 :dir {:north :SC-atrium, :east :SC-1318, :west :SC-1304}
                 :courses {}
-                :items #{}}
+                :items [:lollipop]}
         :SC-1318 {
                 :desc "the Women in Computer Science (WCS) office"
                 :title "in the Siebel Center office 1318"
                 :dir {:east :SC-1320, :west :SC-1210}
                 :courses {}
-                :items #{:pancakes}}
+                :items [:pancakes]}
         :SC-1104 {
                 :desc "the Association for Computing Machinery (ACM) office"
                 :title "in the Siebel Center office 1104"
                 :dir {:north :SC-1105, :south :SC-atrium}
                 :courses {}
-                :items #{:pizza}}
+                :items [:pizza]}
         :SC-1320 {
                 :desc "the Latinos in Computer Science (LCS) office"
                 :title "in the Siebel Center office 1320"
                 :dir {:west :SC-1318}
                 :courses {}
-                :items #{}}
+                :items []}
         :SC-2124 {
                 :desc "the CocoaNuts meeting room"
                 :title "in the Siebel Center conference room 2124"
                 :dir {:south :second-floor-elevator}
                 :courses {}
-                :items #{:friends}}
+                :items [:friends]}
    })
 
 (def adventurer {

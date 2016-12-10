@@ -45,7 +45,7 @@
                 :title "in the Digital Computer Laboratory lecture hall 1320"
                 :dir {:south :Grainger, :east :first-floor-elevator, :west :ECEB-1002}
                 :courses {:freshman :CS125, :sophomore :CS233, :senior :CS411}
-                :items [:troll]}
+                :items [:pen]}
         :SC-1105 {
                 :desc ""
                 :title "in Siebel Center room 1105"
@@ -105,7 +105,7 @@
                 :title "in the Siebel Center office 1318"
                 :dir {:east :SC-1320, :west :SC-1210}
                 :courses {}
-                :items [:pancakes]}
+                :items [:pancake]}
         :SC-1104 {
                 :desc "the Association for Computing Machinery (ACM) office"
                 :title "in the Siebel Center office 1104"
@@ -153,10 +153,15 @@
    (let [location (player :location)
         classrank (player :classrank)
         room (get engineering-campus (player :location))
-        courses-offered (get room :courses)]
+        courses-offered (get room :courses)
+        items (get room :items)]
 
         (println "These are the courses offered" (get room :title) ":")
-        (println courses-offered))
+        (println courses-offered)
+
+        (if (> (count items) 0)
+                (println "\nOMG, you discovered a" (name (peek items)) "item!")))
+
         player)
 
  (defn DARS [player]
@@ -247,7 +252,8 @@
 
   (loop [local-map engineering-campus
          local-player adventurer]
-    (let [pl (status local-player)
+    (let [_ (println "\n****************************************")
+          pl (status local-player)
           _  (println "What do you want to do?")
           command (read-line)]
       (recur local-map (respond local-player (to-keywords command))))))

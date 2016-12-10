@@ -171,7 +171,8 @@
         course (get courses-offered classrank)]
 
      (if (nil? course)
-        (println "There are no classes offered for a" (name classrank) "in this room.")
+        (do (println "There are no classes offered for a" (name classrank) "in this room.")
+                player)
         (do (println "Congratulations, you've earned credit for" (name course) "!")
             (def newPlayer (assoc-in player [:credits] (conj (player :credits) course)))
 
@@ -180,13 +181,25 @@
         ;     Sophomore: CS225, CS233, CS241, and CS296-25
         ;     Junior: CS242, CS374, CS357
         ;     Senior: CS210, CS411, CS421, CS440, CS498
-            (println "------------")
-            (println (newPlayer :credits))
-            (println
-                    (clojure.set/subset? (set '(:CS125, :CS126, :CS173)) (set (newPlayer :credits)))
-            )
+            (cond
+                    (and (= (newPlayer :classrank) :freshman)
+                         (clojure.set/subset? (set '(:CS125, :CS126, :CS173)) (set (newPlayer :credits))))
+                                (assoc-in newPlayer [:classrank] :sophomore)
 
-            (assoc-in newPlayer [:location] location)
+                    (and (= (newPlayer :classrank) :sophomore)
+                         (clojure.set/subset? (set '(:CS225, :CS233, :CS241, :CS296-25)) (set (newPlayer :credits))))
+                                (assoc-in newPlayer [:classrank] :junior)
+
+                    (and (= (newPlayer :classrank) :junior)
+                         (clojure.set/subset? (set '(:CS242, :CS374, :CS357)) (set (newPlayer :credits))))
+                                (assoc-in newPlayer [:classrank] :senior)
+
+                    (clojure.set/subset? (set '(:CS210, :CS411, :CS421, :CS440, :CS498)) (set (newPlayer :credits)))
+                    (do (println "Congratulations, you have made it through hell!")
+                         newPlayer)
+
+                    :else newPlayer
+            )
 
 
             ))))

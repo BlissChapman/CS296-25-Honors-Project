@@ -139,7 +139,8 @@
                 (print (str "You are " (get room :title) " "))
                 (if (not (clojure.string/blank? (get room :desc)))
                         (print "-" (get room :desc)))
-                (println ".")))
+                (println "."))
+                [player map])
 
 (defn to-keywords [commands]
   (mapv keyword (str/split commands #"[.,?! ]+")))
@@ -238,6 +239,7 @@
          (println "collect      -        add the first collectible in a room to your backpack")
          (println "place        -        place all collectibles in your backpack in your current room")
          (println "backpack     -        displays contents of your backpack")
+         (println "status       -        prints your location and classrank")
          (println "help         -        displays all commands")
          (println "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
          [player map])
@@ -267,15 +269,18 @@
                                  (cond
                                          (and (= (newPlayer :classrank) :freshman)
                                               (clojure.set/subset? (set '(:CS125, :CS126, :CS173)) (set (newPlayer :credits))))
-                                                     (assoc-in newPlayer [:classrank] :sophomore)
+                                                     (do (def newNewPlayer (assoc-in newPlayer [:classrank] :sophomore))
+                                                          [newNewPlayer map])
 
                                          (and (= (newPlayer :classrank) :sophomore)
                                               (clojure.set/subset? (set '(:CS225, :CS233, :CS241, :CS296-25)) (set (newPlayer :credits))))
-                                                     (assoc-in newPlayer [:classrank] :junior)
+                                                     (do (def newNewPlayer (assoc-in newPlayer [:classrank] :junior))
+                                                           [newNewPlayer map])
 
                                          (and (= (newPlayer :classrank) :junior)
                                               (clojure.set/subset? (set '(:CS242, :CS374, :CS357)) (set (newPlayer :credits))))
-                                                     (assoc-in newPlayer [:classrank] :senior)
+                                                     (do (def newNewPlayer (assoc-in newPlayer [:classrank] :senior))
+                                                           [newNewPlayer map])
 
                                          (clojure.set/subset? (set '(:CS210, :CS411, :CS421, :CS440, :CS498)) (set (newPlayer :credits)))
                                                 (do (print "\n\n\n***************\n---------------\nCongratulations, you have graduated from CS@Illinois!\nThanks for playing :D\n~Bliss\n---------------\n***************\n\n\n")
@@ -305,6 +310,7 @@
           [:collect] (collect player map)
           [:place] (place player map)
           [:backpack] (backpack player map)
+          [:status] (status player map)
 
           [:help] (help player map)
 

@@ -133,26 +133,26 @@
           :moves-remaining-in-semester 1000
           :backpack []})
 
-(defn status [player]
+(defn status [player map]
         (println (str "You are a " (name (player :classrank)) ". "))
-        (let [room (get engineering-campus (player :location))]
+        (let [room (get map (player :location))]
                 (print (str "You are " (get room :title) ". "))))
 
 (defn to-keywords [commands]
   (mapv keyword (str/split commands #"[.,?! ]+")))
 
-(defn go [dir player]
+(defn go [dir player map]
   (let [location (player :location)
-        dest (->> engineering-campus location :dir dir)]
+        dest (->> map location :dir dir)]
     (if (nil? dest)
         (do (println "You can't go that way.")
-              [player, engineering-campus])
-        [(assoc-in player [:location] dest), engineering-campus])))
+              [player map])
+        [(assoc-in player [:location] dest) map])))
 
- (defn look [player]
+ (defn look [player map]
    (let [location (player :location)
         classrank (player :classrank)
-        room (get engineering-campus location)
+        room (get map location)
         courses-offered (get room :courses)
         items (get room :items)]
 
@@ -162,7 +162,7 @@
         (if (> (count items) 0)
                 (do (println "\nOMG, you discovered: ")
                     (println items))))
-        [player, engineering-campus])
+        [player map])
 
 (defn take [player map]
         (let [location (player :location)
@@ -170,41 +170,23 @@
              items (get room :items)]
 
              (if (> (count items) 0)
-                (do
-                        (println (peek items))
-                        (def newPlayer (assoc-in player [:backpack]
-                                                (conj
-                                                        (player :backpack)
-                                                        (peek items)
-                                                )
-                                        )
-                        )
+                (do (def newPlayer (assoc-in player [:backpack] (conj (player :backpack) (peek items))))
                         (def newItems (pop items))
-                        (println "new items: "   newItems)
                         (def newRoom (assoc-in room [:items] newItems))
-                        (println "new room: "   newRoom)
                         (def newMap (assoc-in map [location] newRoom))
-                        (println "new map: " newMap)
-
-                        [newPlayer, newMap]
-                     )
-
-
+                        [newPlayer newMap])
                 (do (println "There are no items here to take!  Use the look command to view the contents of a room.")
-                     [player, map])
-             )
-        )
-)
+                     [player map]))))
 
 (defn drop [player map]
         [player map]
         )
 
-(defn backpack [player]
-        [player, engineering-campus]
+(defn backpack [player map]
+        [player, map]
         )
 
- (defn DARS [player]
+ (defn DARS [player map]
          (println "")
          (println "")
          (println "---------------------------------")
@@ -218,22 +200,22 @@
          (println "YOUR CREDITS:")
          (println (player :credits))
          (println "")
-         [player, engineering-campus])
+         [player map])
 
- (defn learn [player]
+ (defn learn [player map]
    (let [location (player :location)
         classrank (player :classrank)
-        room (get engineering-campus location)
+        room (get map location)
         courses-offered (get room :courses)
         course (get courses-offered classrank)]
 
      (if (nil? course)
         (do (println "There are no classes offered for a" (name classrank) "in this room.")
-                [player, engineering-campus])
+                [player map])
         (do
                 (if (contains? (set (player :credits)) course)
                         (do (println "You have already taken all courses available for a" (name classrank) "in" (name location)"!  Come back later or check your DARS report for the requirements to advance to the next year.")
-                                [player, engineering-campus])
+                                [player map])
                         (do (def newPlayer (assoc-in player [:credits] (conj (player :credits) course)))
                              (println "Congratulations, you've earned credit for" (name course) "!")
 
@@ -257,32 +239,32 @@
 
                                          (clojure.set/subset? (set '(:CS210, :CS411, :CS421, :CS440, :CS498)) (set (newPlayer :credits)))
                                          (do (println "Congratulations, you have made it through hell!")
-                                              [newPlayer, engineering-campus])
+                                              [newPlayer map])
 
-                                         :else [newPlayer, engineering-campus])))))))
+                                         :else [newPlayer map])))))))
 
 (defn respond [player map command]
   (match command
-          [:north] (go :north player)
-          [:n] (go :north player)
-          [:south] (go :south player)
-          [:s] (go :south player)
-          [:east] (go :east player)
-          [:e] (go :east player)
-          [:west] (go :west player)
-          [:w] (go :west player)
-          [:down] (go :down player)
-          [:d] (go :down player)
-          [:up] (go :up player)
-          [:u] (go :up player)
+          [:north] (go :north player map)
+          [:n] (go :north player map)
+          [:south] (go :south player map)
+          [:s] (go :south player map)
+          [:east] (go :east player map)
+          [:e] (go :east player map)
+          [:west] (go :west player map)
+          [:w] (go :west player map)
+          [:down] (go :down player map)
+          [:d] (go :down player map)
+          [:up] (go :up player map)
+          [:u] (go :up player map)
 
-          [:learn] (learn player)
-          [:DARS] (DARS player)
-          [:look] (look player)
+          [:learn] (learn player map)
+          [:DARS] (DARS player map)
+          [:look] (look player map)
 
           [:take] (take player map)
           [:drop] (drop player map)
-          [:backpack] (backpack player)
+          [:backpack] (backpack player map)
 
          _ (do (println "I don't understand you.")
                [player map])
@@ -297,7 +279,7 @@
   (loop [local-player adventurer
          local-map engineering-campus]
     (let [_ (println "\n****************************************")
-          pl (status local-player)
+          pl (status local-player local-map)
           _ (println "What do you want to do?")
           command (read-line)]
           (def newArgs (respond local-player local-map (to-keywords command)))

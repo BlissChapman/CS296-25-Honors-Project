@@ -4,18 +4,18 @@ Welcome to the University of Illinois at Urbana-Champaign!  You are a freshman i
 Your goal is to obtain the necessary prerequisites to advance your class rank. To win, you must fulfill all the requirements to graduate!
 
 ## Commands
-north        -        move to the north if possible
-south        -        move to the south if possible
-east         -        move to the east if possible
-west         -        move to the west if possible
-down         -        move down a floor when by an elevator
-up           -        move up a floor when by an elevator
-learn        -        take a course offered in your current room for students of your classrank
-DARS         -        view a list of course requirements and your progress
-look         -        view what courses and collectibles are present in your current room
-collect      -        add the first collectible in a room to your backpack
-place        -        place all collectibles in your backpack in your current room
-backpack     -        displays contents of your backpack
-status       -        prints your location and classrank
-help         -        displays all commands
-quit         -        exits the game
+- north        -        move to the north if possible
+- south        -        move to the south if possible
+- east         -        move to the east if possible
+- west         -        move to the west if possible
+- down         -        move down a floor when by an elevator
+- up           -        move up a floor when by an elevator
+- learn        -        take a course offered in your current room for students of your classrank
+- DARS         -        view a list of course requirements and your progress
+- look         -        view what courses and collectibles are present in your current room
+- collect      -        add the first collectible in a room to your backpack
+- place        -        place all collectibles in your backpack in your current room
+- backpack     -        displays contents of your backpack
+- status       -        prints your location and classrank
+- help         -        displays all commands
+- quit         -        exits the game

@@ -9,121 +9,121 @@
                 :title "in the atrium of the Thomas M. Siebel Center for Computer Science"
                 :dir {:north :SC-1104, :south :SC-1210, :east :SC-1404, :west :first-floor-elevator}
                 :courses {}
-                :items #{}}
+                :items [:coffee]}
         :basement-elevator {
                 :desc ""
                 :title "by the basement elevator"
                 :dir {:up :first-floor-elevator, :east :SC-0216}
                 :courses {}
-                :items #{}}
+                :items []}
         :first-floor-elevator {
                 :desc ""
                 :title "by the first floor elevator"
                 :dir {:down :basement-elevator, :up :second-floor-elevator, :west :DCL-1320, :east :SC-atrium}
                 :courses {}
-                :items #{}}
+                :items []}
         :second-floor-elevator {
                 :desc ""
                 :title "by the second floor elevator"
                 :dir {:down :first-floor-elevator, :up :third-floor-elevator, :north :SC-2124}
                 :courses {}
-                :items #{}}
+                :items []}
         :third-floor-elevator {
                 :desc ""
                 :title "by the third floor elevator"
                 :dir {:down :second-floor-elevator, :up :fourth-floor-elevator}
                 :courses {}
-                :items #{}}
+                :items []}
         :fourth-floor-elevator {
                 :desc ""
                 :title "by the fourth floor elevator"
                 :dir {:down :third-floor-elevator, :north :SC-4107}
                 :courses {}
-                :items #{}}
+                :items []}
         :DCL-1320 {
                 :desc ""
                 :title "in the Digital Computer Laboratory lecture hall 1320"
                 :dir {:south :Grainger, :east :first-floor-elevator, :west :ECEB-1002}
                 :courses {:freshman :CS125, :sophomore :CS233, :senior :CS411}
-                :items #{}}
+                :items [:pen]}
         :SC-1105 {
                 :desc ""
                 :title "in Siebel Center room 1105"
                 :dir {:south :SC-1104}
                 :courses {:freshman :CS126}
-                :items #{}}
+                :items []}
         :ECEB-1002 {
                 :desc ""
                 :title "in the Electrical and Computer Engineering Building lecture hall 1002"
                 :dir {:east :DCL-1320}
                 :courses {:freshman :CS173, :sophomore :CS225, :junior :CS374}
-                :items #{}}
+                :items [:TI-84]}
         :SC-0218 {
                 :desc ""
                 :title "in the Siebel Center lab 0218"
                 :dir {:west :SC-0216}
                 :courses {:sophomore :CS241}
-                :items #{}}
+                :items []}
         :SC-0216 {
                 :desc ""
                 :title "in the Siebel Center lab 0216"
                 :dir {:east :SC-0218, :west :basement-elevator}
                 :courses {:sophomore :CS296-25, :senior :CS440}
-                :items #{}}
+                :items []}
         :SC-1404 {
                 :desc ""
                 :title "in the Siebel Center lecture hall 1404"
                 :dir {:west :SC-atrium}
                 :courses {:junior :CS357, :senior :CS421}
-                :items #{}}
+                :items [:swag]}
         :Grainger {
                 :desc ""
                 :title "in the Grainger Engineering Library"
                 :dir {:north :DCL-1320}
                 :courses {:junior :CS242}
-                :items #{}}
+                :items [:markers]}
         :SC-1304 {
                 :desc ""
                 :title "in Siebel Center room 1304"
                 :dir {:east :SC-1210}
                 :courses {:senior :CS210}
-                :items #{}}
+                :items []}
         :SC-4107 {
                 :desc "the virtual reality lab"
                 :title "in the Siebel Center lab 4107"
                 :dir {:south :fourth-floor-elevator}
                 :courses {:senior :CS498}
-                :items #{}}
+                :items [:oculus]}
         :SC-1210 {
                 :desc "the academic advising office"
                 :title "in the Siebel Center office 1210"
                 :dir {:north :SC-atrium, :east :SC-1318, :west :SC-1304}
                 :courses {}
-                :items #{}}
+                :items [:lollipop]}
         :SC-1318 {
                 :desc "the Women in Computer Science (WCS) office"
                 :title "in the Siebel Center office 1318"
                 :dir {:east :SC-1320, :west :SC-1210}
                 :courses {}
-                :items #{:pancakes}}
+                :items [:pancake]}
         :SC-1104 {
                 :desc "the Association for Computing Machinery (ACM) office"
                 :title "in the Siebel Center office 1104"
                 :dir {:north :SC-1105, :south :SC-atrium}
                 :courses {}
-                :items #{:pizza}}
+                :items [:pizza]}
         :SC-1320 {
                 :desc "the Latinos in Computer Science (LCS) office"
                 :title "in the Siebel Center office 1320"
                 :dir {:west :SC-1318}
                 :courses {}
-                :items #{}}
+                :items []}
         :SC-2124 {
                 :desc "the CocoaNuts meeting room"
                 :title "in the Siebel Center conference room 2124"
                 :dir {:south :second-floor-elevator}
                 :courses {}
-                :items #{:friends}}
+                :items [:friends]}
    })
 
 (def adventurer {
@@ -131,35 +131,82 @@
           :classrank :freshman
           :credits []
           :moves-remaining-in-semester 1000
-          :inventory []})
+          :backpack []})
 
-(defn status [player]
+(defn status [player map]
         (println (str "You are a " (name (player :classrank)) ". "))
-        (let [room (get engineering-campus (player :location))]
+        (let [room (get map (player :location))]
                 (print (str "You are " (get room :title) ". "))))
 
 (defn to-keywords [commands]
   (mapv keyword (str/split commands #"[.,?! ]+")))
 
-(defn go [dir player]
+(defn go [dir player map]
   (let [location (player :location)
-        dest (->> engineering-campus location :dir dir)]
+        dest (->> map location :dir dir)]
     (if (nil? dest)
         (do (println "You can't go that way.")
-              player)
-        (assoc-in player [:location] dest))))
+              [player map])
+        [(assoc-in player [:location] dest) map])))
 
- (defn look [player]
+ (defn look [player map]
    (let [location (player :location)
         classrank (player :classrank)
-        room (get engineering-campus (player :location))
-        courses-offered (get room :courses)]
+        room (get map location)
+        courses-offered (get room :courses)
+        items (get room :items)]
 
-        (println "These are the courses offered" (get room :title) ":")
-        (println courses-offered))
-        player)
+        (if (> (count courses-offered) 0)
+            (do (println "These are the courses offered" (get room :title) ":")
+                (println courses-offered))
+            (println "There are no courses offered" (get room :title) "for a" (name classrank) ".\nUse the n, s, e, w commands to navigate to a different room."))
 
- (defn DARS [player]
+        (if (> (count items) 0)
+                (do (println "\nCollectibles: ")
+                    (println items))))
+        [player map])
+
+(defn collect [player map]
+        (let [location (player :location)
+             room (get map location)
+             items (get room :items)]
+
+             (if (> (count items) 0)
+                (do (def newPlayer (assoc-in player [:backpack] (conj (player :backpack) (peek items))))
+                        (def newItems (pop items))
+                        (def newRoom (assoc-in room [:items] newItems))
+                        (def newMap (assoc-in map [location] newRoom))
+                        [newPlayer newMap])
+                (do (println "There are no items here to take!  Use the look command to view the contents of a room.")
+                     [player map]))))
+
+(defn place [player map]
+        (let [location (player :location)
+             room (get map location)
+             roomItems (get room :items)
+             playerItems (get player :backpack)]
+
+             (if (> (count playerItems) 0)
+                (do (def newPlayer (assoc-in player [:backpack] []))
+                        (def newRoomItems (clojure.set/union roomItems playerItems))
+                        (def newRoom (assoc-in room [:items] newRoomItems))
+                        (def newMap (assoc-in map [location] newRoom))
+                        [newPlayer newMap])
+                (do (println "You have nothing to drop.  Use the take command to grab items from a room.")
+                        [player map]))))
+
+(defn backpack [player map]
+        (println "")
+        (println "")
+        (println "---------------------------------")
+        (println "YOUR BACKPACK:")
+        (println (player :backpack))
+        (println "---------------------------------")
+        (println "")
+        [player, map]
+        )
+
+ (defn DARS [player map]
          (println "")
          (println "")
          (println "---------------------------------")
@@ -173,22 +220,22 @@
          (println "YOUR CREDITS:")
          (println (player :credits))
          (println "")
-         player)
+         [player map])
 
- (defn learn [player]
+ (defn learn [player map]
    (let [location (player :location)
         classrank (player :classrank)
-        room (get engineering-campus (player :location))
+        room (get map location)
         courses-offered (get room :courses)
         course (get courses-offered classrank)]
 
      (if (nil? course)
         (do (println "There are no classes offered for a" (name classrank) "in this room.")
-                player)
+                [player map])
         (do
                 (if (contains? (set (player :credits)) course)
                         (do (println "You have already taken all courses available for a" (name classrank) "in" (name location)"!  Come back later or check your DARS report for the requirements to advance to the next year.")
-                                player)
+                                [player map])
                         (do (def newPlayer (assoc-in player [:credits] (conj (player :credits) course)))
                              (println "Congratulations, you've earned credit for" (name course) "!")
 
@@ -212,31 +259,35 @@
 
                                          (clojure.set/subset? (set '(:CS210, :CS411, :CS421, :CS440, :CS498)) (set (newPlayer :credits)))
                                          (do (println "Congratulations, you have made it through hell!")
-                                              newPlayer)
+                                              [newPlayer map])
 
-                                         :else newPlayer)))))))
+                                         :else [newPlayer map])))))))
 
-(defn respond [player command]
+(defn respond [player map command]
   (match command
-          [:north] (go :north player)
-          [:n] (go :north player)
-          [:south] (go :south player)
-          [:s] (go :south player)
-          [:east] (go :east player)
-          [:e] (go :east player)
-          [:west] (go :west player)
-          [:w] (go :west player)
-          [:down] (go :down player)
-          [:d] (go :down player)
-          [:up] (go :up player)
-          [:u] (go :up player)
+          [:north] (go :north player map)
+          [:n] (go :north player map)
+          [:south] (go :south player map)
+          [:s] (go :south player map)
+          [:east] (go :east player map)
+          [:e] (go :east player map)
+          [:west] (go :west player map)
+          [:w] (go :west player map)
+          [:down] (go :down player map)
+          [:d] (go :down player map)
+          [:up] (go :up player map)
+          [:u] (go :up player map)
 
-          [:learn] (learn player)
-          [:DARS] (DARS player)
-          [:look] (look player)
+          [:learn] (learn player map)
+          [:DARS] (DARS player map)
+          [:look] (look player map)
+
+          [:collect] (collect player map)
+          [:place] (place player map)
+          [:backpack] (backpack player map)
 
          _ (do (println "I don't understand you.")
-               player)
+               [player map])
 
          ))
 
@@ -245,9 +296,11 @@
    (println "Welcome to the University of Illinois at Urbana-Champaign!\nYou are a freshman in one of the most prestigious CS programs in the world.\nOver the next four years, you will navigate forests of up-trees, seas of segfaults, and maelstroms of multiplexors.\nIt will take all your wits to survive.\n\nYour goal is to obtain the necessary prerequisites to advance your class rank. To win, you must graduate in 4 years!")
    (println "\n\n---------- may the finals be ever in your favor ----------\n\n")
 
-  (loop [local-map engineering-campus
-         local-player adventurer]
-    (let [pl (status local-player)
-          _  (println "What do you want to do?")
+  (loop [local-player adventurer
+         local-map engineering-campus]
+    (let [_ (println "\n****************************************")
+          pl (status local-player local-map)
+          _ (println "What do you want to do?")
           command (read-line)]
-      (recur local-map (respond local-player (to-keywords command))))))
+          (def newArgs (respond local-player local-map (to-keywords command)))
+          (recur (get newArgs 0) (get newArgs 1)))))

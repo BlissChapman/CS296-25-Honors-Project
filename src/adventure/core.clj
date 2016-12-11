@@ -177,7 +177,7 @@
                         (def newRoom (assoc-in room [:items] newItems))
                         (def newMap (assoc-in map [location] newRoom))
                         [newPlayer newMap])
-                (do (println "There are no items here to take!  Use the look command to view the contents of a room.")
+                (do (println "There are no items here to collect!  Use the look command to view the contents of a room.")
                      [player map]))))
 
 (defn place [player map]
@@ -192,7 +192,7 @@
                         (def newRoom (assoc-in room [:items] newRoomItems))
                         (def newMap (assoc-in map [location] newRoom))
                         [newPlayer newMap])
-                (do (println "You have nothing to drop.  Use the take command to grab items from a room.")
+                (do (println "You have nothing to drop.  Use the collect command to grab items from a room.")
                         [player map]))))
 
 (defn backpack [player map]

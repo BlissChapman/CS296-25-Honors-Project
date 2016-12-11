@@ -130,7 +130,6 @@
           :location :SC-atrium
           :classrank :freshman
           :credits []
-          :moves-remaining-in-semester 1000
           :backpack []})
 
 (defn status [player map]
@@ -141,6 +140,9 @@
                         (print "-" (get room :desc)))
                 (println "."))
                 [player map])
+
+(defn quit []
+        (System/exit 0))
 
 (defn to-keywords [commands]
   (mapv keyword (str/split commands #"[.,?! ]+")))
@@ -244,6 +246,7 @@
          (println "backpack     -        displays contents of your backpack")
          (println "status       -        prints your location and classrank")
          (println "help         -        displays all commands")
+         (println "quit         -        exits the game")
          (println "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
          [player map])
 
@@ -286,7 +289,7 @@
                                                            [newNewPlayer map])
 
                                          (clojure.set/subset? (set '(:CS210, :CS411, :CS421, :CS440, :CS498)) (set (newPlayer :credits)))
-                                                (do (print "\n\n\n***************\n---------------\nCongratulations, you have graduated from CS@Illinois!\nThanks for playing :D\n~Bliss\n---------------\n***************\n\n\n")
+                                                (do (print "\n\n\n************************************************************\n------------------------------------------------------------\nCongratulations, you have graduated from CS@Illinois!\nThanks for playing...you may continue if you wish :D\n<3 Bliss\n------------------------------------------------------------\n************************************************************\n\n\n")
                                                         [newPlayer map])
 
                                          :else [newPlayer map])))))))
@@ -316,6 +319,7 @@
           [:status] (status player map)
 
           [:help] (help player map)
+          [:quit] (quit)
 
          _ (do (println "I don't understand you.")
                [player map])

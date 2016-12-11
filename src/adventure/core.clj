@@ -162,11 +162,11 @@
             (println "There are no courses offered" (get room :title) "for a" (name classrank) ".\nUse the n, s, e, w commands to navigate to a different room."))
 
         (if (> (count items) 0)
-                (do (println "\nOMG, you discovered: ")
+                (do (println "\nCollectibles: ")
                     (println items))))
         [player map])
 
-(defn take [player map]
+(defn collect [player map]
         (let [location (player :location)
              room (get map location)
              items (get room :items)]
@@ -180,7 +180,7 @@
                 (do (println "There are no items here to take!  Use the look command to view the contents of a room.")
                      [player map]))))
 
-(defn drop [player map]
+(defn place [player map]
         (let [location (player :location)
              room (get map location)
              roomItems (get room :items)
@@ -282,8 +282,8 @@
           [:DARS] (DARS player map)
           [:look] (look player map)
 
-          [:take] (take player map)
-          [:drop] (drop player map)
+          [:collect] (collect player map)
+          [:place] (place player map)
           [:backpack] (backpack player map)
 
          _ (do (println "I don't understand you.")

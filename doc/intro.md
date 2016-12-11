@@ -21,4 +21,4 @@ Your goal is to obtain the necessary prerequisites to advance your class rank. T
 - quit         -        exits the game
 
 ## Map
-![Map](https://github.com/Togira/CS296-25-Honors-Project/blob/bug-fixes/doc/Resources/EngineeringCampusMap.png)
+![Map](https://github.com/Togira/CS296-25-Honors-Project/blob/master/doc/Resources/EngineeringCampusMap.png)

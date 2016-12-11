@@ -183,6 +183,13 @@
         )
 
 (defn backpack [player map]
+        (println "")
+        (println "")
+        (println "---------------------------------")
+        (println "YOUR BACKPACK:")
+        (println (player :backpack))
+        (println "---------------------------------")
+        (println "")
         [player, map]
         )
 

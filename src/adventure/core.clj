@@ -179,7 +179,21 @@
                      [player map]))))
 
 (defn drop [player map]
-        [player map]
+        (let [location (player :location)
+             room (get map location)
+             roomItems (get room :items)
+             playerItems (get player :backpack)]
+
+             (if (> (count playerItems) 0)
+                (do (def newPlayer (assoc-in player [:backpack] []))
+                        (def newRoomItems (clojure.set/union roomItems playerItems))
+                        (def newRoom (assoc-in room [:items] newRoomItems))
+                        (def newMap (assoc-in map [location] newRoom))
+                        [newPlayer newMap])
+                (do (println "You have nothing to drop.  Use the take command to grab items from a room.")
+                        [player map])
+             )
+        )
         )
 
 (defn backpack [player map]

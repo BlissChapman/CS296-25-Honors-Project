@@ -206,8 +206,7 @@
         (println (player :backpack))
         (println "---------------------------------")
         (println "")
-        [player, map]
-        )
+        [player, map])
 
  (defn DARS [player map]
          (println "")
@@ -279,8 +278,8 @@
                                                      (assoc-in newPlayer [:classrank] :senior)
 
                                          (clojure.set/subset? (set '(:CS210, :CS411, :CS421, :CS440, :CS498)) (set (newPlayer :credits)))
-                                         (do (println "\n\n\n***************\n---------------\nCongratulations, you have graduated from CS@Illinois!\nHave a great life :D\n~Bliss\n---------------\n***************\n\n\n")
-                                              [newPlayer map])
+                                                (do (print "\n\n\n***************\n---------------\nCongratulations, you have graduated from CS@Illinois!\nThanks for playing :D\n~Bliss\n---------------\n***************\n\n\n")
+                                                        [newPlayer map])
 
                                          :else [newPlayer map])))))))
 
@@ -323,7 +322,7 @@
   (loop [local-player adventurer
          local-map engineering-campus]
     (let [_ (println "\n****************************************")
-          pl (status local-player local-map)
+          _ (status local-player local-map)
           _ (println "What do you want to do?")
           command (read-line)]
           (def newArgs (respond local-player local-map (to-keywords command)))

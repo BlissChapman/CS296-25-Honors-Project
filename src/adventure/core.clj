@@ -136,7 +136,10 @@
 (defn status [player map]
         (println (str "You are a " (name (player :classrank)) ". "))
         (let [room (get map (player :location))]
-                (print (str "You are " (get room :title) ". "))))
+                (print (str "You are " (get room :title) " "))
+                (if (not (clojure.string/blank? (get room :desc)))
+                        (print "-" (get room :desc)))
+                (println ".")))
 
 (defn to-keywords [commands]
   (mapv keyword (str/split commands #"[.,?! ]+")))

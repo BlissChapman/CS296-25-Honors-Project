@@ -225,6 +225,24 @@
          (println "")
          [player map])
 
+(defn help [player map]
+         (println "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+         (println "north        -        move to the north if possible")
+         (println "south        -        move to the south if possible")
+         (println "east         -        move to the east if possible")
+         (println "west         -        move to the west if possible")
+         (println "down         -        move down a floor when by an elevator")
+         (println "up           -        move up a floor when by an elevator")
+         (println "learn        -        take a course offered in your current room for students of your classrank")
+         (println "DARS         -        view a list of course requirements and your progress")
+         (println "look         -        view what courses and collectibles are present in your current room")
+         (println "collect      -        add the first collectible in a room to your backpack")
+         (println "place        -        place all collectibles in your backpack in your current room")
+         (println "backpack     -        displays contents of your backpack")
+         (println "help         -        displays all commands")
+         (println "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+         [player map])
+
  (defn learn [player map]
    (let [location (player :location)
         classrank (player :classrank)
@@ -261,7 +279,7 @@
                                                      (assoc-in newPlayer [:classrank] :senior)
 
                                          (clojure.set/subset? (set '(:CS210, :CS411, :CS421, :CS440, :CS498)) (set (newPlayer :credits)))
-                                         (do (println "Congratulations, you have made it through hell!")
+                                         (do (println "\n\n\n***************\n---------------\nCongratulations, you have graduated from CS@Illinois!\nHave a great life :D\n~Bliss\n---------------\n***************\n\n\n")
                                               [newPlayer map])
 
                                          :else [newPlayer map])))))))
@@ -289,6 +307,8 @@
           [:place] (place player map)
           [:backpack] (backpack player map)
 
+          [:help] (help player map)
+
          _ (do (println "I don't understand you.")
                [player map])
 
@@ -298,6 +318,7 @@
    (println "\n\n---------- CS @ Illinois: The Text Adventure ----------\n\n")
    (println "Welcome to the University of Illinois at Urbana-Champaign!\nYou are a freshman in one of the most prestigious CS programs in the world.\nOver the next four years, you will navigate forests of up-trees, seas of segfaults, and maelstroms of multiplexors.\nIt will take all your wits to survive.\n\nYour goal is to obtain the necessary prerequisites to advance your class rank. To win, you must graduate in 4 years!")
    (println "\n\n---------- may the finals be ever in your favor ----------\n\n")
+   (help adventurer engineering-campus)
 
   (loop [local-player adventurer
          local-map engineering-campus]

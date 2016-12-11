@@ -156,8 +156,10 @@
         courses-offered (get room :courses)
         items (get room :items)]
 
-        (println "These are the courses offered" (get room :title) ":")
-        (println courses-offered)
+        (if (> (count courses-offered) 0)
+            (do (println "These are the courses offered" (get room :title) ":")
+                (println courses-offered))
+            (println "There are no courses offered" (get room :title) "for a" (name classrank) ".\nUse the n, s, e, w commands to navigate to a different room."))
 
         (if (> (count items) 0)
                 (do (println "\nOMG, you discovered: ")
@@ -191,10 +193,7 @@
                         (def newMap (assoc-in map [location] newRoom))
                         [newPlayer newMap])
                 (do (println "You have nothing to drop.  Use the take command to grab items from a room.")
-                        [player map])
-             )
-        )
-        )
+                        [player map]))))
 
 (defn backpack [player map]
         (println "")

@@ -19,3 +19,5 @@ Your goal is to obtain the necessary prerequisites to advance your class rank. T
 - status       -        prints your location and classrank
 - help         -        displays all commands
 - quit         -        exits the game
+
+![Map](https://github.com/Togira/CS296-25-Honors-Project/blob/bug-fixes/doc/Resources/EngineeringCampusMap.png)

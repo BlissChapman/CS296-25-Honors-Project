@@ -289,7 +289,7 @@
                                                            [newNewPlayer map])
 
                                          (clojure.set/subset? (set '(:CS210, :CS411, :CS421, :CS440, :CS498)) (set (newPlayer :credits)))
-                                                (do (print "\n\n\n************************************************************\n------------------------------------------------------------\nCongratulations, you have graduated from CS@Illinois!\nThanks for playing...you may continue if you wish :D\n<3 Bliss\n------------------------------------------------------------\n************************************************************\n\n\n")
+                                                (do (print "\n\n\n************************************************************\n------------------------------------------------------------\nCongratulations, you have graduated from CS @ Illinois!\nThanks for playing...you may continue if you wish :D\n<3 Bliss\n------------------------------------------------------------\n************************************************************\n\n\n")
                                                         [newPlayer map])
 
                                          :else [newPlayer map])))))))
@@ -328,7 +328,7 @@
 
 (defn -main [& args]
    (println "\n\n---------- CS @ Illinois: The Text Adventure ----------\n\n")
-   (println "Welcome to the University of Illinois at Urbana-Champaign!\nYou are a freshman in one of the most prestigious CS programs in the world.\nOver the next four years, you will navigate forests of up-trees, seas of segfaults, and maelstroms of multiplexors.\nIt will take all your wits to survive.\n\nYour goal is to obtain the necessary prerequisites to advance your class rank. To win, you must graduate in 4 years!")
+   (println "Welcome to the University of Illinois at Urbana-Champaign!\nYou are a freshman in one of the most prestigious CS programs in the world.\nOver the next four years, you will navigate forests of up-trees, seas of segfaults, and maelstroms of multiplexors.\nIt will take all your wits to survive.\n\nYour goal is to obtain the necessary prerequisites to advance your class rank. To win, you must fulfill all the requirements to graduate!")
    (println "\n\n---------- may the finals be ever in your favor ----------\n\n")
    (help adventurer engineering-campus)
 

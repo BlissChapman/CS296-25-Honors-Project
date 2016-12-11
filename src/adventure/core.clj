@@ -130,13 +130,19 @@
           :location :SC-atrium
           :classrank :freshman
           :credits []
-          :moves-remaining-in-semester 1000
           :backpack []})
 
 (defn status [player map]
         (println (str "You are a " (name (player :classrank)) ". "))
         (let [room (get map (player :location))]
-                (print (str "You are " (get room :title) ". "))))
+                (print (str "You are " (get room :title) " "))
+                (if (not (clojure.string/blank? (get room :desc)))
+                        (print "-" (get room :desc)))
+                (println "."))
+                [player map])
+
+(defn quit []
+        (System/exit 0))
 
 (defn to-keywords [commands]
   (mapv keyword (str/split commands #"[.,?! ]+")))
@@ -203,8 +209,7 @@
         (println (player :backpack))
         (println "---------------------------------")
         (println "")
-        [player, map]
-        )
+        [player, map])
 
  (defn DARS [player map]
          (println "")
@@ -215,11 +220,34 @@
          (println "     Sophomore: CS225, CS233, CS241, CS296-25")
          (println "     Junior: CS242, CS374, CS357")
          (println "     Senior: CS210, CS411, CS421, CS440, CS498")
-         (println "---------------------------------")
          (println "")
          (println "YOUR CREDITS:")
          (println (player :credits))
          (println "")
+         (println "ACADEMIC STANDING: ")
+         (println (name (player :classrank)))
+         (println "---------------------------------")
+
+         [player map])
+
+(defn help [player map]
+         (println "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+         (println "north        -        move to the north if possible")
+         (println "south        -        move to the south if possible")
+         (println "east         -        move to the east if possible")
+         (println "west         -        move to the west if possible")
+         (println "down         -        move down a floor when by an elevator")
+         (println "up           -        move up a floor when by an elevator")
+         (println "learn        -        take a course offered in your current room for students of your classrank")
+         (println "DARS         -        view a list of course requirements and your progress")
+         (println "look         -        view what courses and collectibles are present in your current room")
+         (println "collect      -        add the first collectible in a room to your backpack")
+         (println "place        -        place all collectibles in your backpack in your current room")
+         (println "backpack     -        displays contents of your backpack")
+         (println "status       -        prints your location and classrank")
+         (println "help         -        displays all commands")
+         (println "quit         -        exits the game")
+         (println "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
          [player map])
 
  (defn learn [player map]
@@ -247,19 +275,22 @@
                                  (cond
                                          (and (= (newPlayer :classrank) :freshman)
                                               (clojure.set/subset? (set '(:CS125, :CS126, :CS173)) (set (newPlayer :credits))))
-                                                     (assoc-in newPlayer [:classrank] :sophomore)
+                                                     (do (def newNewPlayer (assoc-in newPlayer [:classrank] :sophomore))
+                                                          [newNewPlayer map])
 
                                          (and (= (newPlayer :classrank) :sophomore)
                                               (clojure.set/subset? (set '(:CS225, :CS233, :CS241, :CS296-25)) (set (newPlayer :credits))))
-                                                     (assoc-in newPlayer [:classrank] :junior)
+                                                     (do (def newNewPlayer (assoc-in newPlayer [:classrank] :junior))
+                                                           [newNewPlayer map])
 
                                          (and (= (newPlayer :classrank) :junior)
                                               (clojure.set/subset? (set '(:CS242, :CS374, :CS357)) (set (newPlayer :credits))))
-                                                     (assoc-in newPlayer [:classrank] :senior)
+                                                     (do (def newNewPlayer (assoc-in newPlayer [:classrank] :senior))
+                                                           [newNewPlayer map])
 
                                          (clojure.set/subset? (set '(:CS210, :CS411, :CS421, :CS440, :CS498)) (set (newPlayer :credits)))
-                                         (do (println "Congratulations, you have made it through hell!")
-                                              [newPlayer map])
+                                                (do (print "\n\n\n************************************************************\n------------------------------------------------------------\nCongratulations, you have graduated from CS @ Illinois!\nThanks for playing...you may continue if you wish :D\n<3 Bliss\n------------------------------------------------------------\n************************************************************\n\n\n")
+                                                        [newPlayer map])
 
                                          :else [newPlayer map])))))))
 
@@ -285,6 +316,10 @@
           [:collect] (collect player map)
           [:place] (place player map)
           [:backpack] (backpack player map)
+          [:status] (status player map)
+
+          [:help] (help player map)
+          [:quit] (quit)
 
          _ (do (println "I don't understand you.")
                [player map])
@@ -293,13 +328,14 @@
 
 (defn -main [& args]
    (println "\n\n---------- CS @ Illinois: The Text Adventure ----------\n\n")
-   (println "Welcome to the University of Illinois at Urbana-Champaign!\nYou are a freshman in one of the most prestigious CS programs in the world.\nOver the next four years, you will navigate forests of up-trees, seas of segfaults, and maelstroms of multiplexors.\nIt will take all your wits to survive.\n\nYour goal is to obtain the necessary prerequisites to advance your class rank. To win, you must graduate in 4 years!")
+   (println "Welcome to the University of Illinois at Urbana-Champaign!\nYou are a freshman in one of the most prestigious CS programs in the world.\nOver the next four years, you will navigate forests of up-trees, seas of segfaults, and maelstroms of multiplexors.\nIt will take all your wits to survive.\n\nYour goal is to obtain the necessary prerequisites to advance your class rank. To win, you must fulfill all the requirements to graduate!")
    (println "\n\n---------- may the finals be ever in your favor ----------\n\n")
+   (help adventurer engineering-campus)
 
   (loop [local-player adventurer
          local-map engineering-campus]
     (let [_ (println "\n****************************************")
-          pl (status local-player local-map)
+          _ (status local-player local-map)
           _ (println "What do you want to do?")
           command (read-line)]
           (def newArgs (respond local-player local-map (to-keywords command)))
